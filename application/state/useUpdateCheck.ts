@@ -465,7 +465,16 @@ export function useUpdateCheck(): UseUpdateCheckResult {
         updateState.latestRelease.version
       );
     }
-    setUpdateState((prev) => ({ ...prev, hasUpdate: false }));
+    // Silence any in-progress background download for this version
+    dismissedAutoDownloadRef.current = true;
+    setUpdateState((prev) => ({
+      ...prev,
+      hasUpdate: false,
+      // Clear download state so the Bell badge disappears immediately
+      autoDownloadStatus: 'idle',
+      downloadPercent: 0,
+      downloadError: null,
+    }));
   }, [updateState.latestRelease?.version]);
 
   const openReleasePage = useCallback(async () => {
