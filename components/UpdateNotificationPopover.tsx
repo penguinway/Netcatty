@@ -65,6 +65,7 @@ export const UpdateNotificationPopover: React.FC<UpdateNotificationPopoverProps>
           size="icon"
           className="relative h-6 w-6 text-muted-foreground hover:text-foreground app-no-drag"
           title={t('notification.title')}
+          aria-label={t('notification.title')}
         >
           <Bell size={16} />
           {showBadge && (

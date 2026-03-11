@@ -697,7 +697,8 @@ const topTabsAreEqual = (prev: TopTabsProps, next: TopTabsProps): boolean => {
     prev.updateState?.autoDownloadStatus === next.updateState?.autoDownloadStatus &&
     prev.updateState?.downloadPercent === next.updateState?.downloadPercent &&
     prev.updateState?.downloadError === next.updateState?.downloadError &&
-    prev.updateState?.isChecking === next.updateState?.isChecking
+    prev.updateState?.isChecking === next.updateState?.isChecking &&
+    prev.updateState?.latestRelease?.version === next.updateState?.latestRelease?.version
   );
 };
 

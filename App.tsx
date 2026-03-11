@@ -305,6 +305,7 @@ function App({ settings }: { settings: SettingsState }) {
 
   // Update check hook - checks for new versions on startup
   const { updateState, openReleasePage, installUpdate, dismissUpdate, checkNow } = useUpdateCheck();
+  const handleRetryUpdateCheck = useCallback(() => { void checkNow(); }, [checkNow]);
 
   // Window controls - must be before update toast effect which uses openSettingsWindow
   const { openSettingsWindow } = useWindowControls();
@@ -1224,7 +1225,7 @@ function App({ settings }: { settings: SettingsState }) {
         onDismissUpdate={dismissUpdate}
         onInstallUpdate={installUpdate}
         onOpenReleasePage={openReleasePage}
-        onRetryUpdateCheck={() => void checkNow()}
+        onRetryUpdateCheck={handleRetryUpdateCheck}
       />
 
       <div className="flex-1 relative min-h-0">
