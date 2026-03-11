@@ -1,4 +1,4 @@
-import { Bell, Copy, FileText, Folder, LayoutGrid, Minus, Moon, MoreHorizontal, Plus, Shield, Square, Sun, TerminalSquare, X } from 'lucide-react';
+import { Copy, FileText, Folder, LayoutGrid, Minus, Moon, MoreHorizontal, Plus, Shield, Square, Sun, TerminalSquare, X } from 'lucide-react';
 import React, { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { activeTabStore, useActiveTabId } from '../application/state/activeTabStore';
 import { LogView } from '../application/state/useSessionState';
@@ -9,6 +9,8 @@ import { TerminalSession, Workspace } from '../types';
 import { Button } from './ui/button';
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from './ui/context-menu';
 import { SyncStatusButton } from './SyncStatusButton';
+import type { UpdateState } from '../application/state/useUpdateCheck';
+import { UpdateNotificationPopover } from './UpdateNotificationPopover';
 
 // Helper styles for Electron drag regions (use type assertion to include non-standard WebkitAppRegion)
 const dragRegionStyle = { WebkitAppRegion: 'drag' } as React.CSSProperties;
@@ -36,6 +38,12 @@ interface TopTabsProps {
   onStartSessionDrag: (sessionId: string) => void;
   onEndSessionDrag: () => void;
   onReorderTabs: (draggedId: string, targetId: string, position: 'before' | 'after') => void;
+  // Update notification — drives Bell badge and popover
+  updateState: UpdateState;
+  onDismissUpdate: () => void;
+  onInstallUpdate: () => void;
+  onOpenReleasePage: () => void;
+  onRetryUpdateCheck?: () => void;
 }
 
 const sessionStatusDot = (status: TerminalSession['status']) => {
@@ -133,6 +141,11 @@ const TopTabsInner: React.FC<TopTabsProps> = ({
   onStartSessionDrag,
   onEndSessionDrag,
   onReorderTabs,
+  updateState,
+  onDismissUpdate,
+  onInstallUpdate,
+  onOpenReleasePage,
+  onRetryUpdateCheck,
 }) => {
   const { t } = useI18n();
   // Subscribe to activeTabId from external store
@@ -638,9 +651,13 @@ const TopTabsInner: React.FC<TopTabsProps> = ({
 
         {/* Fixed right controls */}
         <div className="flex-shrink-0 flex items-center gap-2 app-drag" style={dragRegionStyle}>
-          <Button variant="ghost" size="icon" className="h-6 w-6 text-muted-foreground hover:text-foreground app-no-drag">
-            <Bell size={16} />
-          </Button>
+          <UpdateNotificationPopover
+            updateState={updateState}
+            onDismissUpdate={onDismissUpdate}
+            onInstallUpdate={onInstallUpdate}
+            onOpenReleasePage={onOpenReleasePage}
+            onRetryUpdateCheck={onRetryUpdateCheck}
+          />
           <SyncStatusButton onOpenSettings={onOpenSettings} onSyncNow={onSyncNow} />
           <Button
             variant="ghost"
@@ -668,11 +685,19 @@ const topTabsAreEqual = (prev: TopTabsProps, next: TopTabsProps): boolean => {
     prev.sessions === next.sessions &&
     prev.orphanSessions === next.orphanSessions &&
     prev.workspaces === next.workspaces &&
+    prev.logViews === next.logViews &&
     prev.orderedTabs === next.orderedTabs &&
     prev.draggingSessionId === next.draggingSessionId &&
     prev.isMacClient === next.isMacClient &&
     prev.onOpenSettings === next.onOpenSettings &&
-    prev.onSyncNow === next.onSyncNow
+    prev.onSyncNow === next.onSyncNow &&
+    // Update state — compare individual fields (not object reference) to avoid
+    // stale renders when state changes but object identity is new each render.
+    prev.updateState?.hasUpdate === next.updateState?.hasUpdate &&
+    prev.updateState?.autoDownloadStatus === next.updateState?.autoDownloadStatus &&
+    prev.updateState?.downloadPercent === next.updateState?.downloadPercent &&
+    prev.updateState?.downloadError === next.updateState?.downloadError &&
+    prev.updateState?.isChecking === next.updateState?.isChecking
   );
 };
 
