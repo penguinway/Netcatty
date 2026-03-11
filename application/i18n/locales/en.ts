@@ -190,6 +190,21 @@ const en: Messages = {
   'update.remindLater': 'Remind Later',
   'update.skipVersion': 'Skip This Version',
 
+  // Notification popover (Bell icon — top bar)
+  'notification.title': 'Notifications',
+  'notification.upToDate': "You're up to date",
+  'notification.checking': 'Checking for updates\u2026',
+  'notification.updateAvailable': 'Update Available',
+  'notification.downloading': 'v{version} is downloading\u2026',
+  'notification.downloadProgress': '{percent}%',
+  'notification.readyToInstall': 'Ready to Install',
+  'notification.readyBody': 'v{version} downloaded and ready',
+  'notification.available': 'v{version} is available',
+  'notification.downloadFailed': 'Download Failed',
+  'notification.newVersion': 'a new version',
+  'notification.ignoreVersion': 'Ignore This Version',
+  'notification.checkAgain': 'Check Again',
+
   // Settings > Appearance
   'settings.appearance.uiTheme': 'UI Theme',
   'settings.appearance.theme': 'Theme',

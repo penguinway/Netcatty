@@ -174,6 +174,21 @@ const zhCN: Messages = {
   'update.remindLater': '稍后提醒',
   'update.skipVersion': '跳过此版本',
 
+  // 通知气泡（顶栏铃铛图标）
+  'notification.title': '通知',
+  'notification.upToDate': '已是最新版本',
+  'notification.checking': '正在检查更新\u2026',
+  'notification.updateAvailable': '发现新版本',
+  'notification.downloading': 'v{version} 正在下载\u2026',
+  'notification.downloadProgress': '{percent}%',
+  'notification.readyToInstall': '更新已就绪',
+  'notification.readyBody': 'v{version} 已下载，准备安装',
+  'notification.available': 'v{version} 已发布',
+  'notification.downloadFailed': '下载失败',
+  'notification.newVersion': '新版本',
+  'notification.ignoreVersion': '忽略此版本',
+  'notification.checkAgain': '重新检查',
+
   // Settings > Appearance
   'settings.appearance.uiTheme': '界面主题',
   'settings.appearance.theme': '主题',
