@@ -304,7 +304,7 @@ function App({ settings }: { settings: SettingsState }) {
   }, [handleSyncNow]);
 
   // Update check hook - checks for new versions on startup
-  const { updateState, dismissUpdate, openReleasePage, installUpdate } = useUpdateCheck();
+  const { updateState, openReleasePage, installUpdate, dismissUpdate, checkNow } = useUpdateCheck();
 
   // Window controls - must be before update toast effect which uses openSettingsWindow
   const { openSettingsWindow } = useWindowControls();
@@ -1220,6 +1220,11 @@ function App({ settings }: { settings: SettingsState }) {
         onStartSessionDrag={setDraggingSessionId}
         onEndSessionDrag={handleEndSessionDrag}
         onReorderTabs={reorderTabs}
+        updateState={updateState}
+        onDismissUpdate={dismissUpdate}
+        onInstallUpdate={installUpdate}
+        onOpenReleasePage={openReleasePage}
+        onRetryUpdateCheck={() => void checkNow()}
       />
 
       <div className="flex-1 relative min-h-0">
